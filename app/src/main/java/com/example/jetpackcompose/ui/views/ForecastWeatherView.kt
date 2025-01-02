@@ -113,19 +113,26 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
                 // Der Text unten darf entfernt werden.
 
                 ////////////////////////////////////
+
+                items(forecast.size) { index ->
+                    val forecastItem = forecast[index]
+                    WeatherCard(forecastItem = forecastItem)
+                }
             }
 
         }
+        /*
+                Text(
+                    text = "TODO: Implement me :)",
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    ),
+                    modifier = Modifier
+                        .padding(bottom = 32.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
 
-        Text(
-            text = "TODO: Implement me :)",
-            style = MaterialTheme.typography.headlineLarge.copy(
-                fontSize = 18.sp,
-                color = Color.Black
-            ),
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .align(Alignment.CenterHorizontally)
-        )
+         */
     }
 }

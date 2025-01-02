@@ -43,9 +43,17 @@ class PopupService : Service() {
 
         ////////////////////////////////////
 
+        // Erstelle eine sofortige Benachrichtigung, um den Foreground-Service zu starten
+        val initialNotification = getNotification("Service is starting...")
+        startForeground(1, initialNotification)
+
+        initializeTimerFromSettings()   // Timer initialisieren
+
+        if (isNotificationEnabled) {
+            handler.post(showNotificationRunnable)  // Runnable starten
+        }
 
         registerUpdateReceiver()
-        initializeTimerFromSettings()
     }
 
     override fun onDestroy() {
@@ -65,12 +73,18 @@ class PopupService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private val showNotificationRunnable = object : Runnable {
+        private var isRunning = false   // Variable, um mehrfaches Ausführen zu verhindern
+
         override fun run() {
-            if (isNotificationEnabled) {
+            if (isNotificationEnabled && !isRunning) {
+                isRunning = true    // Setze isRunning auf true, um Mehrfachaufrufe zu verhindern
                 sendNotification("Hello World $i")
                 i++
+                handler.postDelayed({
+                    isRunning = false   // Setze isRunning auf false nach der Verzögerung
+                    handler.post(this)  // Starte den Runnable erneut
+                }, delayMillis)
             }
-            handler.postDelayed(this, delayMillis)
         }
     }
 
